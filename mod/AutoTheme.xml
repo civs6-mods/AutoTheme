@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Context Name="AutoTheme">
+  <Container ID="UpdateAnchor" Size="1,1" ConsumeMouse="0"/>
+  <Container ID="ThemeTools" Anchor="L,T" Offset="180,0" Size="560,54" Hidden="1">
+    <GridButton ID="ThemeButton" Anchor="L,C" Size="148,34" Style="ButtonMainSmall" String="LOC_AT_START"/>
+    <Line Start="163,10" End="163,44" Width="1" Color="210,190,140,100"/>
+    <Image ID="ThemeIcon" Anchor="L,C" Offset="176,0" Size="32,32"/>
+    <Label ID="ThemeCount" Anchor="L,C" Offset="214,0" Style="FontNormal16" Color="231,215,166,255" String=""/>
+    <Line Start="345,10" End="345,44" Width="1" Color="210,190,140,100"/>
+    <Container ID="StatusPanel" Anchor="L,T" Offset="365,0" Size="190,54" Hidden="1">
+      <Label ID="StatusHeading" Anchor="L,T" Offset="0,8" TruncateWidth="185" Style="FontNormal16" Color="206,218,225,255" String=""/>
+      <Label ID="StatusLabel" Anchor="L,T" Offset="0,30" TruncateWidth="185" Style="FontNormal14" Color="180,187,192,255" String=""/>
+    </Container>
+  </Container>
+</Context>

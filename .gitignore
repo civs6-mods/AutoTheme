@@ -1,0 +1,8 @@
+/dist/
+/node_modules/
+__pycache__/
+*.pyc
+*.log
+*.Civ6Save
+.env
+.env.*
