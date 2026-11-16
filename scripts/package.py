@@ -2,7 +2,7 @@ from pathlib import Path
 from zipfile import ZipFile,ZIP_DEFLATED
 import subprocess,sys
 r=Path(__file__).resolve().parents[1];subprocess.run([sys.executable,str(r/'scripts/verify.py')],check=True)
-out=r/'dist/AutoTheme-0.2.4.zip';out.parent.mkdir(exist_ok=True)
+out=r/'dist/AutoTheme-0.2.5.zip';out.parent.mkdir(exist_ok=True)
 with ZipFile(out,'w',ZIP_DEFLATED) as z:
  for p in sorted((r/'mod').iterdir()):
   if p.is_file():z.write(p,'AutoTheme/'+p.name)

@@ -10,7 +10,7 @@
 
 ## 当前版本
 
-**0.2.4 · 仅单机 · 已公开发布。**
+**0.2.5 · 仅单机 · 已公开发布。**
 
 - 扫描整个巨作面板的实际作品与合法槽位，包含艺术品、文物、遗物、著作、音乐、公司及奇观产品等。
 - 通过原生移动指令逐笔交换，确认实际槽位内容后再继续。
@@ -26,6 +26,8 @@
 ### 整理后
 
 ![整理后：24 件藏品，5 座主题](workshop/gallery/02-after.jpg)
+
+名称、简介、游戏内按钮与提示支持简体中文和英语，跟随游戏语言自动切换。
 
 ## 安装与使用
 
@@ -44,7 +46,7 @@ python scripts/test.py
 python scripts/package.py
 ```
 
-`mod/` 为可安装源码，`tests/` 为离线回归，`workshop/` 为封面、双语介绍与实机截图。生成包位于 `dist/AutoTheme-0.2.4.zip`。实现细节与测试记录见[详细规则](docs/BEHAVIOR.zh-CN.md)和[验证记录](docs/VERIFICATION.md)。
+`mod/` 为可安装源码，`tests/` 为离线回归，`workshop/` 为封面、双语介绍与实机截图。生成包位于 `dist/AutoTheme-0.2.5.zip`。实现细节与测试记录见[详细规则](docs/BEHAVIOR.zh-CN.md)和[验证记录](docs/VERIFICATION.md)。
 
 ## 参与开发与许可
 

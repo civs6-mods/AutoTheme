@@ -1,11 +1,11 @@
 {
-  "version": "0.2.4",
-  "manifestVersion": 7,
+  "version": "0.2.5",
+  "manifestVersion": 8,
   "modId": "d908d082-9c4e-4bbb-ab01-902f1e9c493e4a8a",
   "workshopItem": "3840337211",
   "files": {
     "AutoTheme.lua": "1384658428ecdfc0db6ba3c1ea74ab900dee7fa21f228ca356b416eee1e1485d",
-    "AutoTheme.modinfo": "26aed208306ec5f5449cf6a3ec1c0d0608712ba30c2b85078f8ea02894baa02a",
+    "AutoTheme.modinfo": "62bf8a97fa17d570af31f18359f0fea804e419b63355f9667436a1b45e8ea289",
     "AutoTheme.xml": "6060beba62fe9b0fe7437d9ae6058cc76431da30fe458c1f0a1b4b231d33ecba",
     "AutoTheme_Planner.lua": "863c6505373ba8293afbeb3abb255b9601e106963b6b97c0773310db5bd7b7bd",
     "AutoTheme_Scoring.lua": "5b064f16a437164df96a5c00505166579b0dd68844b294e345dec0158515cc2f",

@@ -10,7 +10,7 @@ Arrange the Great Works you already own with one click in Civilization VI. AutoT
 
 ## Current release
 
-**0.2.4 · Single-player only · Available on Steam.**
+**0.2.5 · Single-player only · Available on Steam.**
 
 - Scans actual works and slots across the Great Works panel, including art, artifacts, relics, writing, music, corporation products and standard mod-added types.
 - Uses native move requests one at a time and waits for the actual slot contents before continuing.
@@ -26,6 +26,8 @@ In this gameplay demo, the same 24-work collection increased from one themed bui
 ### After
 
 ![After: 24 Great Works, five themed buildings](workshop/gallery/02-after.jpg)
+
+Names, descriptions, in-game controls and messages support Simplified Chinese and English, following the game language.
 
 ## Installation & use
 
@@ -44,7 +46,7 @@ python scripts/test.py
 python scripts/package.py
 ```
 
-`mod/` contains installable Lua/XML; `tests/` contains offline regressions; `workshop/` contains the cover, bilingual descriptions and gameplay images. The ZIP is written to `dist/AutoTheme-0.2.4.zip`. See [detailed rules](docs/BEHAVIOR.zh-CN.md) and [verification records](docs/VERIFICATION.md) for implementation and testing details.
+`mod/` contains installable Lua/XML; `tests/` contains offline regressions; `workshop/` contains the cover, bilingual descriptions and gameplay images. The ZIP is written to `dist/AutoTheme-0.2.5.zip`. See [detailed rules](docs/BEHAVIOR.zh-CN.md) and [verification records](docs/VERIFICATION.md) for implementation and testing details.
 
 ## Contributing & license
 

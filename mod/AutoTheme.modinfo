@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="d908d082-9c4e-4bbb-ab01-902f1e9c493e4a8a" version="7">
+<Mod id="d908d082-9c4e-4bbb-ab01-902f1e9c493e4a8a" version="8">
   <Properties>
-    <Name>巨作一键整理 / Auto Theme</Name>
-    <Description>整理整个巨作面板的艺术品、文物、遗物、著作、音乐、公司及奇观产品。优先主题化，再改善普通存放。</Description>
+    <Name>LOC_AT_MOD_NAME</Name>
+    <Description>LOC_AT_MOD_DESCRIPTION</Description>
     <Authors>xuanda0201</Authors>
     <AffectsSavedGames>0</AffectsSavedGames>
     <CompatibleVersions>1.2,2.0</CompatibleVersions>
@@ -10,6 +10,16 @@
     <SupportsMultiplayer>0</SupportsMultiplayer>
     <SupportsHotSeat>0</SupportsHotSeat>
   </Properties>
+  <LocalizedText>
+    <Text id="LOC_AT_MOD_NAME">
+      <en_US>AutoTheme — Arrange Great Works</en_US>
+      <zh_Hans_CN>巨作一键整理</zh_Hans_CN>
+    </Text>
+    <Text id="LOC_AT_MOD_DESCRIPTION">
+      <en_US>Arrange existing Great Works with one click, including art, artifacts, relics, writing, music and products. Form new themes first, organize remaining works and preserve existing themes.</en_US>
+      <zh_Hans_CN>整理整个巨作面板的艺术品、文物、遗物、著作、音乐、公司及奇观产品。优先组合主题，再整理其余藏品，保留已有主题。</zh_Hans_CN>
+    </Text>
+  </LocalizedText>
   <InGameActions>
     <AddUserInterfaces id="AT_UI">
       <Properties><Context>InGame</Context><LoadOrder>20000</LoadOrder></Properties>

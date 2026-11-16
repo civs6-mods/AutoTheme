@@ -1,3 +1,7 @@
+# 0.2.5 bilingual update / 双语更新
+
+2026-11-17: Mod-list names and descriptions now use embedded en_US / zh_Hans_CN localization. Existing in-game translations are audited for matching keys and placeholders. Gameplay scripts and native binaries are unchanged. This update does not enable multiplayer or hotseat. No new in-game language-switch playtest is claimed.
+
 # Verification / 验证范围
 
 Release: AutoTheme 0.2.4, manifest 7. The seven files under `mod/` match the published Steam package. `release-manifest.json` records their SHA-256 hashes.
