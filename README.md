@@ -1,4 +1,4 @@
-# AutoTheme — Arrange Great Works
+# Great Works Auto Theming
 
 [简体中文](README.zh-CN.md) · **English** · [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3840337211)
 
@@ -10,7 +10,7 @@ Arrange the Great Works you already own with one click in Civilization VI. AutoT
 
 ## Current release
 
-**0.3.0-mp.2 · Single-player and multiplayer (beta).**
+**0.3.0-mp.3 · Single-player and multiplayer (beta).**
 
 All players should use the same mod version for multiplayer. Each player arranges their own collection. See [multiplayer use](docs/MULTIPLAYER.md).
 
@@ -33,7 +33,7 @@ Names, descriptions, in-game controls and messages support Simplified Chinese an
 
 ## Installation & use
 
-Subscribe on Steam and enable **AutoTheme** in Additional Content → Mods. During your turn, open Great Works and click Arrange Great Works. For multiplayer, have all players update to the same version before starting or joining a game; see [multiplayer use](docs/MULTIPLAYER.md).
+Subscribe on Steam and enable **Great Works Auto Theming** in Additional Content → Mods. During your turn, open Great Works and click Theme Great Works. For multiplayer, have all players update to the same version before starting or joining a game; see [multiplayer use](docs/MULTIPLAYER.md).
 
 For manual installation, exit the game and copy `mod/` into your Civilization VI `Mods` directory, naming the copied folder `AutoTheme`.
 
@@ -50,7 +50,7 @@ python scripts/test.py
 python scripts/package.py
 ```
 
-`mod/` contains installable Lua/XML; `tests/` contains offline regressions; `workshop/` contains the public release's cover, bilingual descriptions and gameplay images. The ZIP is written to `dist/AutoTheme-0.3.0-mp.2.zip`. See [detailed rules](docs/BEHAVIOR.zh-CN.md) and [verification records](docs/VERIFICATION.md) for implementation and testing details.
+`mod/` contains installable Lua/XML; `tests/` contains offline regressions; `workshop/` contains the public release's cover, bilingual descriptions and gameplay images. The ZIP is written to `dist/AutoTheme-0.3.0-mp.3.zip`. See [detailed rules](docs/BEHAVIOR.zh-CN.md) and [verification records](docs/VERIFICATION.md) for implementation and testing details.
 
 ## Contributing & license
 

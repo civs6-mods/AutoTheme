@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="d908d082-9c4e-4bbb-ab01-902f1e9c493e4a8a" version="10">
+<Mod id="d908d082-9c4e-4bbb-ab01-902f1e9c493e4a8a" version="11">
   <Properties>
     <Name>LOC_AT_MOD_NAME</Name>
     <Description>LOC_AT_MOD_DESCRIPTION</Description>
@@ -12,8 +12,8 @@
   </Properties>
   <LocalizedText>
     <Text id="LOC_AT_MOD_NAME">
-      <en_US>AutoTheme — Arrange Great Works</en_US>
-      <zh_Hans_CN>巨作一键整理</zh_Hans_CN>
+      <en_US>Great Works Auto Theming</en_US>
+      <zh_Hans_CN>巨作一键主题化</zh_Hans_CN>
     </Text>
     <Text id="LOC_AT_MOD_DESCRIPTION">
       <en_US>Arrange existing Great Works with one click, including art, artifacts, relics, writing, music and products. Form new themes first, organize remaining works and preserve existing themes.</en_US>

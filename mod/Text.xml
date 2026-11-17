@@ -24,10 +24,10 @@
     <Row Tag="LOC_AT_READY" Language="zh_Hans_CN"><Text>有可改善的组合或存放位置</Text></Row>
     <Row Tag="LOC_AT_READY" Language="en_US"><Text>A better arrangement is available</Text></Row>
     <Row Tag="LOC_AT_START" Language="zh_Hans_CN">
-      <Text>一键整理</Text>
+      <Text>一键主题化</Text>
     </Row>
     <Row Tag="LOC_AT_START" Language="en_US">
-      <Text>Arrange Great Works</Text>
+      <Text>Theme Great Works</Text>
     </Row>
     <Row Tag="LOC_AT_CANCEL" Language="zh_Hans_CN">
       <Text>停止整理</Text>

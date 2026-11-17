@@ -365,4 +365,4 @@ ContextPtr:SetShutdown(function()
     for _, event in pairs(availabilityEvents) do event.Remove(MarkAvailabilityDirty); end
 end);
 StartUpdates();
-print("[AutoTheme] UI loaded (0.3.0-mp.2 native toolbar)");
+print("[AutoTheme] UI loaded (0.3.0-mp.3 native toolbar)");

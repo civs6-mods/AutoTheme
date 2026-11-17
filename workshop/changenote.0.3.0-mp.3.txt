@@ -1,0 +1,5 @@
+0.3.0-mp.3 — 名称更新 / Name update
+
+更名为“巨作一键主题化 / Great Works Auto Theming”，更直观地说明用途。同步更新游戏内名称、按钮和使用说明。支持单机与联机（联机测试版），联机玩家请使用相同版本。
+
+Renamed to Great Works Auto Theming, with matching in-game names, button labels and instructions. Supports single-player and multiplayer (multiplayer beta). All players should use the same version.

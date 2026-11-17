@@ -1,19 +1,19 @@
 {
   "id": "3840337211",
   "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3840337211",
-  "title": "巨作一键整理 / Auto Theme",
-  "version": "0.3.0-mp.2",
+  "title": "巨作一键主题化 / Great Works Auto Theming",
+  "version": "0.3.0-mp.3",
   "visibility": "public",
   "multiplayer": "beta",
   "singlePlayer": true,
   "titles": {
-    "schinese": "巨作一键整理 / Auto Theme",
-    "english": "AutoTheme - Arrange Great Works"
+    "schinese": "巨作一键主题化 / Great Works Auto Theming",
+    "english": "Great Works Auto Theming"
   },
   "publication": {
     "date": "2026-11-17",
-    "manifestVersion": 10,
-    "downloadHashVerified": true,
+    "manifestVersion": 11,
+    "downloadHashVerified": false,
     "descriptionLanguages": [
       "english",
       "schinese"

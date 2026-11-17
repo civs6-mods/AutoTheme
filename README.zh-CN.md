@@ -1,16 +1,16 @@
-# AutoTheme 巨作一键整理
+# 巨作一键主题化 / Great Works Auto Theming
 
 [English](README.md) · [Steam 创意工坊](https://steamcommunity.com/sharedfiles/filedetails/?id=3840337211) · [详细规则](docs/BEHAVIOR.zh-CN.md)
 
 在《文明 VI》中点击一次，整理自己已经拥有的巨作。保留已有主题，先尝试组合新主题，再改善其余藏品的存放位置。
 
-[![观看巨作一键整理实机演示](workshop/preview.png)](https://www.youtube.com/watch?v=MuCYF0KRlxY)
+[![观看巨作一键主题化实机演示](workshop/preview.png)](https://www.youtube.com/watch?v=MuCYF0KRlxY)
 
 [观看 28 秒实机演示](https://www.youtube.com/watch?v=MuCYF0KRlxY)
 
 ## 当前版本
 
-**0.3.0-mp.2 · 支持单机与联机（联机测试版）。**
+**0.3.0-mp.3 · 支持单机与联机（联机测试版）。**
 
 联机玩家请使用相同版本，每位玩家只整理自己的藏品。使用方法见[联机说明](docs/MULTIPLAYER.md)。
 
@@ -33,7 +33,7 @@
 
 ## 安装与使用
 
-订阅工坊，在“额外内容 → 模组”启用“巨作一键整理 / AutoTheme”。进入自己的回合，打开巨作窗口，点击“一键整理”。联机前请所有玩家更新到相同版本，具体见[联机说明](docs/MULTIPLAYER.md)。
+订阅工坊，在“额外内容 → 模组”启用“巨作一键主题化 / Great Works Auto Theming”。进入自己的回合，打开巨作窗口，点击“一键主题化”。联机前请所有玩家更新到相同版本，具体见[联机说明](docs/MULTIPLAYER.md)。
 
 手动安装：退出游戏，将本仓库的 `mod` 文件夹复制到游戏 `Mods` 目录，并命名为 `AutoTheme`。
 
@@ -50,7 +50,7 @@ python scripts/test.py
 python scripts/package.py
 ```
 
-`mod/` 为可安装源码，`tests/` 为离线回归，`workshop/` 为公开版的封面、双语介绍与实机截图。生成包位于 `dist/AutoTheme-0.3.0-mp.2.zip`。实现细节与测试记录见[详细规则](docs/BEHAVIOR.zh-CN.md)和[验证记录](docs/VERIFICATION.md)。
+`mod/` 为可安装源码，`tests/` 为离线回归，`workshop/` 为公开版的封面、双语介绍与实机截图。生成包位于 `dist/AutoTheme-0.3.0-mp.3.zip`。实现细节与测试记录见[详细规则](docs/BEHAVIOR.zh-CN.md)和[验证记录](docs/VERIFICATION.md)。
 
 ## 参与开发与许可
 

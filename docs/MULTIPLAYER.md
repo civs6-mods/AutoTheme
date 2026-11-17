@@ -1,4 +1,4 @@
-# AutoTheme 0.3.0-mp.2 — 联机测试 / Multiplayer testing
+# AutoTheme 0.3.0-mp.3 — 联机测试 / Multiplayer testing
 
 支持单机与联机，联机功能目前处于测试阶段；热座未启用。已通过代码审查与离线回归，双客户端实机同步仍待验证。
 
@@ -8,10 +8,10 @@ Single-player and multiplayer are supported, with multiplayer currently in beta 
 
 1. 所有玩家订阅 Steam 工坊的 AutoTheme，等待更新完成，在“额外内容 → 模组”中启用。
 2. 双方使用相同游戏版本、规则集、DLC 与 Mod 版本；首轮建议仅启用官方内容和 AutoTheme。
-3. 双方启用巨作一键整理后建立网络对局。轮到自己且尚未提交结束回合时，打开巨作面板，点击一键整理。主机、加入者均使用这个入口。
+3. 双方启用巨作一键主题化后建立网络对局。轮到自己且尚未提交结束回合时，打开巨作面板，点击一键主题化。主机、加入者均使用这个入口。
 4. 手动安装可使用发布包中的 `AutoTheme/` 文件夹；采用手动包时，确保它与工坊订阅不会重复加载。
 
-All players should subscribe on Steam, finish updating and enable AutoTheme before hosting or joining. Use the same game, ruleset, DLC and mod versions on both computers. For the first test, enable only official content and this mod. Click Arrange Great Works during your active turn, before submitting End Turn. Manual installation is also available through the package's `AutoTheme/` folder; avoid loading duplicate local and Workshop copies.
+All players should subscribe on Steam, finish updating and enable Great Works Auto Theming before hosting or joining. Use the same game, ruleset, DLC and mod versions on both computers. For the first test, enable only official content and this mod. Click Theme Great Works during your active turn, before submitting End Turn. Manual installation is also available through the package's `AutoTheme/` folder; avoid loading duplicate local and Workshop copies.
 
 ## 验证步骤 / Acceptance steps
 

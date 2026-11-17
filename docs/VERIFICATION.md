@@ -1,3 +1,7 @@
+# 0.3.0-mp.3 naming update / 名称更新
+
+2026-11-17: Manifest 11 renames the mod to “巨作一键主题化 / Great Works Auto Theming” and the action button to “一键主题化 / Theme Great Works”. Workshop titles, descriptions, README headings and usage instructions match the new names. The existing mod ID and Workshop item are retained. The only Lua change is the diagnostic version string; planner, scoring and execution behavior are unchanged. Bilingual metadata, 30 paired in-game keys, placeholders, XML and the seven-file release manifest pass validation. The server confirms both localized Workshop descriptions and titles. Existing screenshots and video are retained; no new gameplay validation is claimed for this naming update.
+
 # 0.3.0-mp.2 Workshop release / 工坊发布
 
 2026-11-17: Published manifest 10 to the existing public Steam Workshop item 3840337211. The Chinese and English descriptions label multiplayer as beta and ask players to use the same version. Detailed verification scope remains in these technical records. The installable files are unchanged from the reviewed `f49ee59` build; all seven files downloaded from Steam match `release-manifest.json`. Both localized descriptions were read back successfully, with the existing two screenshots and one video retained. A concise bilingual change note was submitted after the initial technical wording; the older historical note was not edited because browser access was blocked.
