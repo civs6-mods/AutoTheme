@@ -13,7 +13,7 @@
   "publication": {
     "date": "2026-11-17",
     "manifestVersion": 11,
-    "downloadHashVerified": false,
+    "downloadHashVerified": true,
     "descriptionLanguages": [
       "english",
       "schinese"

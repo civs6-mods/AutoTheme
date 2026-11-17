@@ -1,6 +1,12 @@
+# 0.3.0-mp.3 single-player live regression / 单机实机回归
+
+2026-11-17: All seven Steam-installed files match the manifest 11 / 0.3.0-mp.3 release hashes. Re-ran all offline suites successfully. Then loaded a separate copy of the 24-work demo save in a real Windows Steam single-player game (English UI, Gathering Storm / HD collection). Clicked the visible “Theme Great Works” button once: the engine confirmed three swaps, themed buildings increased from 1 to 5, and all 24 work IDs remained present. The three slots of the pre-existing themed building were unchanged. The toolbar reported “Done: 4 new themed buildings, 3 swaps”; closing and reopening the panel preserved that result, with further arrangement disabled because no better plan remained. No mod code or engine state was patched for this test. Read-only Lua snapshots and commands are retained in the local `regression/20261117/autotheme-sp-mp3` evidence folder.
+
+This verifies the single-player arrangement flow in that save after the multiplayer scheduler changes. It does not claim exhaustive compatibility or a live multiplayer test.
+
 # 0.3.0-mp.3 naming update / 名称更新
 
-2026-11-17: Manifest 11 renames the mod to “巨作一键主题化 / Great Works Auto Theming” and the action button to “一键主题化 / Theme Great Works”. Workshop titles, descriptions, README headings and usage instructions match the new names. The existing mod ID and Workshop item are retained. The only Lua change is the diagnostic version string; planner, scoring and execution behavior are unchanged. Bilingual metadata, 30 paired in-game keys, placeholders, XML and the seven-file release manifest pass validation. The server confirms both localized Workshop descriptions and titles. Existing screenshots and video are retained; no new gameplay validation is claimed for this naming update.
+2026-11-17: Manifest 11 renames the mod to “巨作一键主题化 / Great Works Auto Theming” and the action button to “一键主题化 / Theme Great Works”. Workshop titles, descriptions, README headings and usage instructions match the new names. The existing mod ID and Workshop item are retained. The only Lua change is the diagnostic version string; planner, scoring and execution behavior are unchanged. Bilingual metadata, 30 paired in-game keys, placeholders, XML and the seven-file release manifest pass validation. The server confirms both localized Workshop descriptions and titles. The subsequent single-player live check is recorded above.
 
 # 0.3.0-mp.2 Workshop release / 工坊发布
 
