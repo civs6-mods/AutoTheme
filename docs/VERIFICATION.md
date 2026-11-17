@@ -1,3 +1,9 @@
+# 0.3.0-mp.2 Workshop release / 工坊发布
+
+2026-11-17: Published manifest 10 to the existing public Steam Workshop item 3840337211. The Chinese and English descriptions label multiplayer as beta and ask players to use the same version. Detailed verification scope remains in these technical records. The installable files are unchanged from the reviewed `f49ee59` build; all seven files downloaded from Steam match `release-manifest.json`. Both localized descriptions were read back successfully, with the existing two screenshots and one video retained. A concise bilingual change note was submitted after the initial technical wording; the older historical note was not edited because browser access was blocked.
+
+This release enables multiplayer beta distribution. It does not add a new live two-client test result.
+
 # 0.3.0-mp.2 source comparison and scheduling fixes / 源码对照与修复
 
 2026-11-17: Manifest 10. Compared native Great Work moves with Great Works Viewer, CQUI/Better Trade Screen automation and Multiplayer Helper's gameplay/UI separation, disconnect and host tooling. Pinned references and findings are in [the code review](MULTIPLAYER_CODE_REVIEW.zh-CN.md).
@@ -6,7 +12,7 @@ The scheduler now checks turn activation completion, local timer expiration and 
 
 All offline suites pass: planner (25 assertions), availability, interactions, multiplayer scheduler (953 assertions, including repeated mock ownership checks, not 953 distinct scenarios), and bilingual metadata / 30 in-game text keys. New cases cover timer expiry while the core still reports an active turn, timer/message changes during snapshot collection, incomplete activation, pause/unpause, message processing, late confirmation across turns, recovery after loading and both host-migration events. Existing single-player scenarios also pass. The cross-turn guard test failed against mp.1 before the implementation change.
 
-Conclusion: the native-operation integration is consistent with the reviewed sources; identified scheduling issues are fixed and the offline regressions pass. Actual peer replication, packet loss, reconnect/save-load, Windows–macOS interoperability and arbitrary mod combinations remain outside code-only verification. No live multiplayer result is claimed. Steam's public 0.2.5 package is unchanged.
+Conclusion: the native-operation integration is consistent with the reviewed sources; identified scheduling issues are fixed and the offline regressions pass. Actual peer replication, packet loss, reconnect/save-load, Windows–macOS interoperability and arbitrary mod combinations remain outside code-only verification. No live multiplayer result is claimed. At the time of this source review, Steam's public package was still 0.2.5; publication is recorded above.
 
 # 0.3.0-mp.1 multiplayer test build / 历史联机测试包
 

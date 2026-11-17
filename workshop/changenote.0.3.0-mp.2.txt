@@ -1,0 +1,5 @@
+0.3.0-mp.2 — 支持联机（测试） / Multiplayer support (beta)
+
+新增联机支持（测试版），继续支持单机。每位玩家都可以一键整理自己的巨作。联机前请所有玩家更新到相同版本，欢迎反馈使用中遇到的问题。
+
+Adds multiplayer support (beta) while retaining single-player support. Each player can arrange their own Great Works with one click. Please have all players update to the same version before playing together. Feedback is welcome.

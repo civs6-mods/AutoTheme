@@ -10,11 +10,9 @@ Arrange the Great Works you already own with one click in Civilization VI. AutoT
 
 ## Current release
 
-**0.3.0-mp.2 · Multiplayer test build.** The public Steam release is still 0.2.5.
+**0.3.0-mp.2 · Single-player and multiplayer (beta).**
 
-This branch enables network multiplayer using native Great Work move requests. Each player arranges only their own collection. Offline scheduler checks pass; a two-client game test is still required. See [multiplayer installation and test steps](docs/MULTIPLAYER.md).
-
-The [source comparison and code review](docs/MULTIPLAYER_CODE_REVIEW.zh-CN.md) covers Great Works Viewer, CQUI/Better Trade Screen, Multiplayer Helper and the native UI. The reviewed build adds timer, message-processing, pause and host-migration guards and preserves unconfirmed requests across turn boundaries.
+All players should use the same mod version for multiplayer. Each player arranges their own collection. See [multiplayer use](docs/MULTIPLAYER.md).
 
 - Scans actual works and slots across the Great Works panel, including art, artifacts, relics, writing, music, corporation products and standard mod-added types.
 - Uses native move requests one at a time and waits for the actual slot contents before continuing.
@@ -35,13 +33,15 @@ Names, descriptions, in-game controls and messages support Simplified Chinese an
 
 ## Installation & use
 
-For the public single-player version, subscribe on Steam and enable **AutoTheme** in Additional Content → Mods. During your turn, open Great Works and click Arrange Great Works. For this multiplayer build, follow the [test package instructions](docs/MULTIPLAYER.md).
+Subscribe on Steam and enable **AutoTheme** in Additional Content → Mods. During your turn, open Great Works and click Arrange Great Works. For multiplayer, have all players update to the same version before starting or joining a game; see [multiplayer use](docs/MULTIPLAYER.md).
 
 For manual installation, exit the game and copy `mod/` into your Civilization VI `Mods` directory, naming the copied folder `AutoTheme`.
 
 Great Work theming is part of base Civilization VI. AutoTheme does not require Harmony in Diversity; it uses the works, buildings and slot rules in the current game and can also be used alongside HD.
 
 ## Development
+
+The [source comparison and code review](docs/MULTIPLAYER_CODE_REVIEW.zh-CN.md) covers Great Works Viewer, CQUI/Better Trade Screen, Multiplayer Helper and the native UI. Verification details are kept in the [technical records](docs/VERIFICATION.md).
 
 ```sh
 python scripts/verify.py

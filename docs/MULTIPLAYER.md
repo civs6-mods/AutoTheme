@@ -1,17 +1,17 @@
 # AutoTheme 0.3.0-mp.2 — 联机测试 / Multiplayer testing
 
-本包启用网络联机；热座未启用。Steam 公开版仍为 0.2.5。本包已通过离线测试，尚未完成双客户端实机同步验证。
+支持单机与联机，联机功能目前处于测试阶段；热座未启用。已通过代码审查与离线回归，双客户端实机同步仍待验证。
 
-This package enables network multiplayer, with hotseat disabled. Steam's public release remains 0.2.5. Offline checks pass; two-client synchronization has not yet been playtested.
+Single-player and multiplayer are supported, with multiplayer currently in beta and hotseat disabled. Code review and offline regressions pass; live two-client synchronization is still awaiting validation.
 
 ## 安装 / Install
 
-1. 两台电脑使用相同游戏版本、规则集、DLC 与 Mod 版本；首轮建议仅启用官方内容和本包。
-2. 退出游戏，临时取消订阅公开版 AutoTheme，将已有本地 AutoTheme 文件夹移到 `Mods` 目录外备份。解压本包，将其中 `AutoTheme/` 放入游戏用户目录的 `Mods/`，确保相同 Mod ID 只保留一份。
+1. 所有玩家订阅 Steam 工坊的 AutoTheme，等待更新完成，在“额外内容 → 模组”中启用。
+2. 双方使用相同游戏版本、规则集、DLC 与 Mod 版本；首轮建议仅启用官方内容和 AutoTheme。
 3. 双方启用巨作一键整理后建立网络对局。轮到自己且尚未提交结束回合时，打开巨作面板，点击一键整理。主机、加入者均使用这个入口。
-4. 回到公开版时退出游戏，移走本包并恢复工坊订阅。
+4. 手动安装可使用发布包中的 `AutoTheme/` 文件夹；采用手动包时，确保它与工坊订阅不会重复加载。
 
-Use the same game, ruleset, DLC and mod versions on both computers. For the first test, enable only official content and this mod. Exit the game, temporarily unsubscribe from the public AutoTheme item, and back up any local copy outside `Mods`. Extract `AutoTheme/` into the game's user `Mods/` directory, keeping only one copy of this mod ID. Enable it on both computers before hosting/joining. Click Arrange Great Works during your active turn, before submitting End Turn. To restore the public version, exit the game, remove this package and resubscribe.
+All players should subscribe on Steam, finish updating and enable AutoTheme before hosting or joining. Use the same game, ruleset, DLC and mod versions on both computers. For the first test, enable only official content and this mod. Click Arrange Great Works during your active turn, before submitting End Turn. Manual installation is also available through the package's `AutoTheme/` folder; avoid loading duplicate local and Workshop copies.
 
 ## 验证步骤 / Acceptance steps
 
