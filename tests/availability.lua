@@ -10,7 +10,7 @@ local function event()
 end
 Events={};
 for _,name in ipairs({"GreatWorkMoved","GreatWorkCreated","BuildingAddedToMap","BuildingRemovedFromMap",
-    "CityAddedToMap","CityRemovedFromMap","CityFocusChanged","BuildingChanged","DistrictPillaged","DistrictDamageChanged","LocalPlayerTurnBegin","LocalPlayerTurnEnd","LoadScreenClose"}) do
+    "CityAddedToMap","CityRemovedFromMap","CityFocusChanged","BuildingChanged","DistrictPillaged","DistrictDamageChanged","LocalPlayerTurnBegin","LocalPlayerTurnEnd","LocalPlayerChanged","LoadScreenClose"}) do
     Events[name]=event();
 end
 local active=true;

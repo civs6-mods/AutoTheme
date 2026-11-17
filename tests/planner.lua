@@ -72,4 +72,17 @@ b.slotType="WRITING";s.works[b.work].object="GREATWORKOBJECT_WRITING";
 check(not AutoTheme.CanSwap(a,b,s),"do not exchange incompatible slot types");
 plan=AutoTheme.Plan({containers={},slots={},works={}});
 check(#plan.steps==0 and #plan.targets==0,"empty collection is a valid no-op");
+-- A pending request must continue reading its original owner's slots even if
+-- the local player changes and both civilizations reuse the same city IDs.
+Game={GetLocalPlayer=function() return 1; end};
+local owner=0;
+local buildings={HasBuilding=function() return true; end,GetNumGreatWorkSlots=function() return 3; end,
+    GetGreatWorkInSlot=function() return 101; end};
+local city={GetOwner=function() return owner; end,GetBuildings=function() return buildings; end};
+Players={[0]={GetCities=function() return {FindID=function() return city; end}; end}};
+local slot={city=1,building=1,slot=0};
+check(AutoTheme.ReadSlot(slot,0)==101,'pending slot read binds original owner');
+check(AutoTheme.ReadSlot(slot)==nil,'default read uses the current local player');
+owner=1; check(AutoTheme.ReadSlot(slot,0)==nil,'captured city invalidates original owner read');
+owner=0; slot.slot=3; check(AutoTheme.ReadSlot(slot,0)==nil,'removed slot invalidates pending read');
 print("AutoTheme planner: "..checks.." assertions passed");

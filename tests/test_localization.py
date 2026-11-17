@@ -23,6 +23,6 @@ for tag, in db.execute('SELECT DISTINCT Tag FROM LocalizedText'):
 for p in (r/'mod').glob('*.lua'):
  for tag in re.findall(r'["\'](LOC_(?:AT|BS|DISTRICT_BS)_[A-Z0-9_]+)["\']',p.read_text('utf8')):
   assert db.execute('SELECT COUNT(*) FROM LocalizedText WHERE Tag=?',(tag,)).fetchone()[0]==2,(p.name,tag)
-assert root.findtext('./Properties/SupportsMultiplayer')=='0'
+assert root.findtext('./Properties/SupportsMultiplayer')=='1'
 assert root.findtext('./Properties/SupportsHotSeat')=='0'
 print(mod.stem+': bilingual metadata, '+str(db.execute('SELECT COUNT(DISTINCT Tag) FROM LocalizedText').fetchone()[0])+' in-game keys and matching placeholders verified')

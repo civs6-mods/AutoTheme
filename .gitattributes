@@ -1,0 +1,5 @@
+# Keep installable text byte-identical across Windows and Linux checkouts.
+/mod/*.lua text eol=lf
+/mod/*.xml text eol=lf
+/mod/*.modinfo text eol=lf
+/mod/*.txt text eol=lf

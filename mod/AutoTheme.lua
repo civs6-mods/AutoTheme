@@ -10,6 +10,11 @@ local availabilityTurn = -1;
 local availabilityStatusDirty = true;
 local availabilitySignature;
 local availabilityPollClock = -10;
+local availabilityPlayer, availabilityActive;
+-- A submitted native operation cannot be cancelled. Keep its guard even if
+-- the plan stops, so a slow response cannot cause a second conflicting run.
+local outstanding = {};
+local RESPONSE_TIMEOUT = 30;
 
 local function SnapshotSignature(snapshot)
     local parts = {};
@@ -53,9 +58,29 @@ local function Status(key, ...)
     Controls.StatusLabel:SetToolTipString(Text(key, ...));
 end
 
-local function Active()
-    local id = Game.GetLocalPlayer();
-    return id ~= nil and id >= 0 and Players[id] ~= nil and Players[id]:IsTurnActive();
+local function Active(id)
+    id = id or Game.GetLocalPlayer();
+    return id ~= nil and id >= 0 and id == Game.GetLocalPlayer() and Players[id] ~= nil and
+        Players[id]:IsTurnActive() and not (UI.HasSentTurnComplete and UI.HasSentTurnComplete()) and
+        not (UI.IsResyncLoadInProgress and UI.IsResyncLoadInProgress());
+end
+
+local function PendingOperation()
+    return outstanding[Game.GetLocalPlayer()];
+end
+
+local function RefreshOutstanding()
+    for player, pending in pairs(outstanding) do
+        -- A new authoritative turn ends the lifetime of a previous-turn request.
+        -- Within the same turn, only the actual exchanged slots release it.
+        if Game.GetCurrentGameTurn() ~= pending.turn or
+            (AT.ReadSlot(pending.source, player) == pending.after[pending.source.key] and
+             AT.ReadSlot(pending.destination, player) == pending.after[pending.destination.key]) then
+            outstanding[player] = nil;
+            availabilityDirty = true;
+            availabilityStatusDirty = true;
+        end
+    end
 end
 
 local function Finish(reason, ...)
@@ -94,14 +119,15 @@ end
 local function Begin()
     if run then run.cancel = true; Status("CANCELLING"); return; end
     if not Active() then Status("WAIT_TURN"); return; end
+    if PendingOperation() then Status("WAIT_SYNC"); return; end
     -- Do planning on the next UI update so the status can be drawn first.
-    run = {planning = true, moves = 0};
+    run = {planning = true, moves = 0, player = Game.GetLocalPlayer(), turn = Game.GetCurrentGameTurn()};
     Controls.ThemeButton:SetText(Text("CANCEL"));
     Status("PLANNING");
 end
 
 local function Prepare()
-    local snapshot = AT.Collect();
+    local snapshot = AT.Collect(run.player);
     local plan = AT.Plan(snapshot);
     if #plan.steps == 0 then
         Finish(NoPlanReason(snapshot, plan)); return;
@@ -123,14 +149,14 @@ end
 
 local function ReadAll(expected)
     for key, value in pairs(expected) do
-        if AT.ReadSlot(run.snapshot.slots[key]) ~= value then return false; end
+        if AT.ReadSlot(run.snapshot.slots[key], run.player) ~= value then return false; end
     end
     return true;
 end
 
 local function Move(source, destination)
     local parameters = {};
-    parameters[PlayerOperations.PARAM_PLAYER_ONE] = Game.GetLocalPlayer();
+    parameters[PlayerOperations.PARAM_PLAYER_ONE] = run.player;
     parameters[PlayerOperations.PARAM_CITY_SRC] = source.city;
     parameters[PlayerOperations.PARAM_CITY_DEST] = destination.city;
     parameters[PlayerOperations.PARAM_GREAT_WORK_INDEX] = source.work;
@@ -142,14 +168,19 @@ local function Move(source, destination)
     after[source.key] = destination.work;
     after[destination.key] = source.work;
     -- Wait for the actual slot contents before submitting another swap.
-    run.pending = {after = after, deadline = clock + 8};
-    UI.RequestPlayerOperation(Game.GetLocalPlayer(), PlayerOperations.MOVE_GREAT_WORK, parameters);
+    run.pending = {after = after, deadline = clock + RESPONSE_TIMEOUT, turn = run.turn,
+        source = source, destination = destination};
+    outstanding[run.player] = run.pending;
+    UI.RequestPlayerOperation(run.player, PlayerOperations.MOVE_GREAT_WORK, parameters);
     print("[AutoTheme] Requested work " .. tostring(source.work) .. " -> " .. destination.key);
 end
 
 local function Step()
     if run == nil then return; end
-    if not Active() then Finish("TURN_ENDED"); return; end
+    if run.player ~= Game.GetLocalPlayer() or (UI.IsResyncLoadInProgress and UI.IsResyncLoadInProgress()) then
+        Finish("SESSION_CHANGED"); return;
+    end
+    if run.turn ~= Game.GetCurrentGameTurn() or not Active(run.player) then Finish("TURN_ENDED"); return; end
     if UI.IsGameCoreBusy() then return; end
     if run.planning then
         if run.cancel then Finish("CANCELLED", run.moves); else Prepare(); end
@@ -157,18 +188,19 @@ local function Step()
     end
     if run.pending then
         if ReadAll(run.pending.after) then
+            outstanding[run.player] = nil;
             run.expected = run.pending.after;
             run.pending = nil;
             run.moves = run.moves + 1;
             run.cursor = run.cursor + 1;
         elseif not ReadAll(run.expected) then Finish("CHANGED"); return;
-        elseif clock >= run.pending.deadline then Finish("REJECTED"); return;
+        elseif clock >= run.pending.deadline then Finish("WAIT_SYNC"); return;
         else return; end
     end
     if run.cancel then Finish("CANCELLED", run.moves); return; end
     if not ReadAll(run.expected) then Finish("CHANGED"); return; end
 
-    local current = AT.Collect();
+    local current = AT.Collect(run.player);
     local byContainer = {};
     for _, container in ipairs(current.containers) do
         byContainer[container.key] = container;
@@ -198,6 +230,17 @@ local function Update(delta)
     clock = clock + delta; elapsed = elapsed + delta;
     if elapsed < 0.2 then return; end
     elapsed = 0;
+    -- Guard settlement can outlive a cancelled/failed plan. Never retry a
+    -- network operation merely because its response has not arrived yet.
+    if not UI.IsGameCoreBusy() and not (UI.IsResyncLoadInProgress and UI.IsResyncLoadInProgress()) then
+        local ok, message = pcall(RefreshOutstanding);
+        if not ok then print("[AutoTheme] Waiting for slot confirmation: " .. tostring(message)); end
+    end
+    local player, active = Game.GetLocalPlayer(), Active();
+    if player ~= availabilityPlayer or active ~= availabilityActive then
+        availabilityPlayer, availabilityActive = player, active;
+        availabilityDirty = true; availabilityStatusDirty = true;
+    end
     local shown = AttachToolbar();
     if run and not shown then run.cancel = true; end
     if shown and not wasShown then availabilityDirty = true; availabilityStatusDirty = true; end
@@ -230,10 +273,11 @@ local function Update(delta)
         if ok then Controls.ThemeCount:SetText(Text("THEMED_COUNT", snapshot.themed or 0)); end
         local reason, detail;
         if not Active() then reason = "WAIT_TURN";
+        elseif PendingOperation() then reason = "WAIT_SYNC";
         elseif not ok then reason = "ERROR";
         elseif available then reason = "READY";
         else reason, detail = NoPlanReason(snapshot, plan); end
-        Controls.ThemeButton:SetDisabled(not Active() or not available);
+        Controls.ThemeButton:SetDisabled(not Active() or PendingOperation() ~= nil or not available);
         Controls.ThemeButton:SetToolTipString(Text("HELP") .. "[NEWLINE]" .. Text(reason, detail));
         if availabilityStatusDirty then
             Status(reason, detail);
@@ -254,6 +298,23 @@ local function StartUpdates()
     ContextPtr:SetHide(false);
     ContextPtr:SetUpdate(Update);
 end
+local function OnLoadComplete()
+    -- Reconnect/resync/read-load must never resume a plan from a former session.
+    if run then Finish("SESSION_CHANGED"); end
+    outstanding = {};
+    availabilityDirty = true; availabilityStatusDirty = true;
+    availabilitySignature = nil;
+    StartUpdates();
+end
+local function OnPlayerChanged()
+    if run then Finish("SESSION_CHANGED"); end
+    availabilityDirty = true; availabilityStatusDirty = true;
+    availabilitySignature = nil;
+end
+local function OnTurnEnd()
+    if run then Finish("TURN_ENDED"); end
+    availabilityDirty = true; availabilityStatusDirty = true;
+end
 ContextPtr:SetInitHandler(StartUpdates);
 -- A newly created work is not a move. Invalidate the cached plan for changes
 -- to works, slots, city scoring and turn ownership while the panel stays open.
@@ -270,15 +331,23 @@ local availabilityEvents = {
 for _, event in pairs(availabilityEvents) do
     event.Add(MarkAvailabilityDirty);
 end
-Events.LoadScreenClose.Add(StartUpdates);
+Events.LoadScreenClose.Add(OnLoadComplete);
+Events.LocalPlayerChanged.Add(OnPlayerChanged);
+Events.LocalPlayerTurnEnd.Add(OnTurnEnd);
+-- A player departure can lead to host migration/resync. Stop the local chain;
+-- retain any submitted operation guard until the core confirms its outcome.
+if Events.MultiplayerPrePlayerDisconnected then Events.MultiplayerPrePlayerDisconnected.Add(OnPlayerChanged); end
 ContextPtr:SetShutdown(function()
     -- Reparented controls otherwise survive a context hot reload under the
     -- native header and can overlap the replacement toolbar's labels.
     Controls.ThemeTools:SetHide(true);
     Controls.ThemeTools:ChangeParent(Controls.UpdateAnchor);
     ContextPtr:ClearUpdate();
-    Events.LoadScreenClose.Remove(StartUpdates);
+    Events.LoadScreenClose.Remove(OnLoadComplete);
+    Events.LocalPlayerChanged.Remove(OnPlayerChanged);
+    Events.LocalPlayerTurnEnd.Remove(OnTurnEnd);
+    if Events.MultiplayerPrePlayerDisconnected then Events.MultiplayerPrePlayerDisconnected.Remove(OnPlayerChanged); end
     for _, event in pairs(availabilityEvents) do event.Remove(MarkAvailabilityDirty); end
 end);
 StartUpdates();
-print("[AutoTheme] UI loaded (0.2.4 native toolbar)");
+print("[AutoTheme] UI loaded (0.3.0-mp.1 native toolbar)");

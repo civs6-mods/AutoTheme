@@ -23,18 +23,20 @@ local function Fits(work, slot)
 end
 
 function AT.SlotKey(city, building, slot) return table.concat({city, building, slot}, ":"); end
-function AT.ReadSlot(slot)
-    local player = Players[Game.GetLocalPlayer()];
+function AT.ReadSlot(slot, playerID)
+    playerID = playerID or Game.GetLocalPlayer();
+    local player = Players[playerID];
     local city = player and player:GetCities():FindID(slot.city);
-    if not city or city:GetOwner() ~= Game.GetLocalPlayer() then return nil; end
+    if not city or city:GetOwner() ~= playerID then return nil; end
     local buildings = city:GetBuildings();
     if not buildings:HasBuilding(slot.building) or buildings:GetNumGreatWorkSlots(slot.building) <= slot.slot then return nil; end
     return buildings:GetGreatWorkInSlot(slot.building, slot.slot);
 end
 
-function AT.Collect()
+function AT.Collect(playerID)
     local snapshot = {containers = {}, slots = {}, works = {}, themed = 0, locked = 0, objects = {}};
-    local player = Players[Game.GetLocalPlayer()];
+    playerID = playerID or Game.GetLocalPlayer();
+    local player = Players[playerID];
     if not player then return snapshot; end
     local metadata = {};
     for row in GameInfo.Building_GreatWorks() do

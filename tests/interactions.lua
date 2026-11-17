@@ -12,7 +12,7 @@ end
 Events={};
 for _,name in ipairs({'GreatWorkMoved','GreatWorkCreated','BuildingAddedToMap','BuildingRemovedFromMap',
     'CityAddedToMap','CityRemovedFromMap','BuildingChanged','DistrictPillaged','DistrictDamageChanged',
-    'CityFocusChanged','LocalPlayerTurnBegin','LocalPlayerTurnEnd','LoadScreenClose'}) do Events[name]=event(); end
+    'CityFocusChanged','LocalPlayerTurnBegin','LocalPlayerTurnEnd','LocalPlayerChanged','LoadScreenClose'}) do Events[name]=event(); end
 Game={GetLocalPlayer=function() return 0; end,GetCurrentGameTurn=function() return 100; end};
 Players={[0]={IsTurnActive=function() return active; end}};
 PlayerOperations={MOVE_GREAT_WORK=1,PARAM_PLAYER_ONE='player',PARAM_CITY_SRC='citySource',PARAM_CITY_DEST='cityDest',
@@ -44,6 +44,7 @@ dofile('mod/AutoTheme.lua');
 local function tick() update(0.6); end
 local function start()
     active=true; hidden=false; busy=false; contents={1,2,3}; requests={}; canSwap=true;
+    Events.LoadScreenClose.fire();
     Events.GreatWorkMoved.fire(); tick(); click(); tick(); tick();
     assert(#requests==1,'first native swap must be submitted exactly once');
 end
@@ -71,7 +72,9 @@ requests={}; click(); hidden=true; tick(); assert(#requests==0 and status=='LOC_
 
 -- Unexpected manual changes, native rejection, and missing acknowledgements stop safely.
 start(); contents[3]=999; tick(); assert(status=='LOC_AT_CHANGED' and #requests==1);
-start(); update(9); assert(status=='LOC_AT_REJECTED' and #requests==1);
+start(); update(31); assert(status=='LOC_AT_WAIT_SYNC' and #requests==1);
+click(); tick(); assert(#requests==1,'unconfirmed request must block a fresh plan');
+reply(); tick(); assert(#requests==1,'late reply must not resume the old plan');
 start(); reply(); canSwap=false; tick(); assert(status=='LOC_AT_REJECTED' and #requests==1);
 
 -- A confirmed native result is accepted even after a long engine busy interval.
@@ -79,7 +82,7 @@ start(); busy=true; update(30); assert(#requests==1); reply(); busy=false; tick(
 assert(#requests==2); reply(); tick(); assert(status=='LOC_AT_DONE');
 
 start(); active=false; Events.LocalPlayerTurnEnd.fire(); tick();
-assert(status=='LOC_AT_TURN_ENDED' and #requests==1);
+assert((status=='LOC_AT_TURN_ENDED' or status=='LOC_AT_WAIT_TURN') and #requests==1);
 reply(); active=true; Events.LocalPlayerTurnBegin.fire(); tick(); assert(#requests==1);
 shutdown(); assert(update==nil);
 print('AutoTheme interaction regression passed: serial swaps, cancel, close/reopen, manual change, rejection, busy, turn end');
