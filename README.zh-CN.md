@@ -4,9 +4,9 @@
 
 在《文明 VI》中点击一次，整理自己已经拥有的巨作。保留已有主题，先尝试组合新主题，再改善其余藏品的存放位置。
 
-[![观看巨作一键主题化实机演示](workshop/preview.png)](https://www.youtube.com/watch?v=MuCYF0KRlxY)
+[![观看巨作一键主题化实机演示](workshop/preview.png)](https://www.youtube.com/watch?v=miwl-MJ0upk)
 
-[观看 28 秒实机演示](https://www.youtube.com/watch?v=MuCYF0KRlxY)
+[观看 28 秒实机演示](https://www.youtube.com/watch?v=miwl-MJ0upk)
 
 ## 当前版本
 

@@ -4,9 +4,9 @@
 
 Arrange the Great Works you already own with one click in Civilization VI. AutoTheme preserves existing themes, attempts new themed combinations first, and then improves supported placements for the remaining collection.
 
-[![Watch the gameplay demo](workshop/preview.png)](https://www.youtube.com/watch?v=MuCYF0KRlxY)
+[![Watch the gameplay demo](workshop/preview.png)](https://www.youtube.com/watch?v=miwl-MJ0upk)
 
-[Watch the 28-second gameplay demo](https://www.youtube.com/watch?v=MuCYF0KRlxY)
+[Watch the 28-second gameplay demo](https://www.youtube.com/watch?v=miwl-MJ0upk)
 
 ## Current release
 
