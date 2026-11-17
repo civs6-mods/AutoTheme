@@ -10,9 +10,11 @@
 
 ## 当前版本
 
-**0.3.0-mp.1 · 联机测试包。** Steam 公开版目前仍为 0.2.5。
+**0.3.0-mp.2 · 联机测试包。** Steam 公开版目前仍为 0.2.5。
 
 本分支已启用网络联机，通过原生巨作移动请求同步，每位玩家只整理自己的藏品。离线调度回归通过，双客户端实机同步仍待验证。安装与验证步骤见[联机测试说明](docs/MULTIPLAYER.md)。
+
+已对照 Great Works Viewer、CQUI/Better Trade Screen、Multiplayer Helper 和原版界面源码完成[代码审查](docs/MULTIPLAYER_CODE_REVIEW.zh-CN.md)，补上计时器、消息处理、暂停、房主迁移检查，并保留跨回合未确认指令的保护。
 
 - 扫描整个巨作面板的实际作品与合法槽位，包含艺术品、文物、遗物、著作、音乐、公司及奇观产品等。
 - 通过原生移动指令逐笔交换，确认实际槽位内容后再继续。
@@ -48,7 +50,7 @@ python scripts/test.py
 python scripts/package.py
 ```
 
-`mod/` 为可安装源码，`tests/` 为离线回归，`workshop/` 为公开版的封面、双语介绍与实机截图。生成包位于 `dist/AutoTheme-0.3.0-mp.1.zip`。实现细节与测试记录见[详细规则](docs/BEHAVIOR.zh-CN.md)和[验证记录](docs/VERIFICATION.md)。
+`mod/` 为可安装源码，`tests/` 为离线回归，`workshop/` 为公开版的封面、双语介绍与实机截图。生成包位于 `dist/AutoTheme-0.3.0-mp.2.zip`。实现细节与测试记录见[详细规则](docs/BEHAVIOR.zh-CN.md)和[验证记录](docs/VERIFICATION.md)。
 
 ## 参与开发与许可
 

@@ -61,8 +61,18 @@ end
 local function Active(id)
     id = id or Game.GetLocalPlayer();
     return id ~= nil and id >= 0 and id == Game.GetLocalPlayer() and Players[id] ~= nil and
-        Players[id]:IsTurnActive() and not (UI.HasSentTurnComplete and UI.HasSentTurnComplete()) and
+        Players[id]:IsTurnActive() and
+        (not Players[id].IsTurnActiveComplete or Players[id]:IsTurnActiveComplete()) and
+        not (UI.HasSentTurnComplete and UI.HasSentTurnComplete()) and
+        not (UI.IsTurnTimerElapsed and UI.IsTurnTimerElapsed(id)) and
+        not (GameConfiguration and GameConfiguration.IsPaused and GameConfiguration.IsPaused()) and
         not (UI.IsResyncLoadInProgress and UI.IsResyncLoadInProgress());
+end
+
+local function CoreBusy()
+    -- The native ActionPanel also excludes message processing. Slot updates
+    -- must have finished before confirming an exchange or planning another.
+    return UI.IsGameCoreBusy() or (UI.IsProcessingMessages and UI.IsProcessingMessages());
 end
 
 local function PendingOperation()
@@ -71,11 +81,10 @@ end
 
 local function RefreshOutstanding()
     for player, pending in pairs(outstanding) do
-        -- A new authoritative turn ends the lifetime of a previous-turn request.
-        -- Within the same turn, only the actual exchanged slots release it.
-        if Game.GetCurrentGameTurn() ~= pending.turn or
-            (AT.ReadSlot(pending.source, player) == pending.after[pending.source.key] and
-             AT.ReadSlot(pending.destination, player) == pending.after[pending.destination.key]) then
+        -- A turn-number change is not an acknowledgement. Only observed slot
+        -- results release a request in this session; loading resets the session.
+        if AT.ReadSlot(pending.source, player) == pending.after[pending.source.key] and
+            AT.ReadSlot(pending.destination, player) == pending.after[pending.destination.key] then
             outstanding[player] = nil;
             availabilityDirty = true;
             availabilityStatusDirty = true;
@@ -168,7 +177,7 @@ local function Move(source, destination)
     after[source.key] = destination.work;
     after[destination.key] = source.work;
     -- Wait for the actual slot contents before submitting another swap.
-    run.pending = {after = after, deadline = clock + RESPONSE_TIMEOUT, turn = run.turn,
+    run.pending = {after = after, deadline = clock + RESPONSE_TIMEOUT,
         source = source, destination = destination};
     outstanding[run.player] = run.pending;
     UI.RequestPlayerOperation(run.player, PlayerOperations.MOVE_GREAT_WORK, parameters);
@@ -181,7 +190,7 @@ local function Step()
         Finish("SESSION_CHANGED"); return;
     end
     if run.turn ~= Game.GetCurrentGameTurn() or not Active(run.player) then Finish("TURN_ENDED"); return; end
-    if UI.IsGameCoreBusy() then return; end
+    if CoreBusy() then return; end
     if run.planning then
         if run.cancel then Finish("CANCELLED", run.moves); else Prepare(); end
         return;
@@ -223,6 +232,10 @@ local function Step()
         Finish("CHANGED"); return;
     end
     if not AT.CanSwap(source, destination, current) then Finish("REJECTED"); return; end
+    -- Revalidate after collecting/planning: a local timer can expire while
+    -- that work runs, before the game core clears IsTurnActive.
+    if run.turn ~= Game.GetCurrentGameTurn() or not Active(run.player) then Finish("TURN_ENDED"); return; end
+    if CoreBusy() then return; end
     Move(source, destination);
 end
 
@@ -232,7 +245,7 @@ local function Update(delta)
     elapsed = 0;
     -- Guard settlement can outlive a cancelled/failed plan. Never retry a
     -- network operation merely because its response has not arrived yet.
-    if not UI.IsGameCoreBusy() and not (UI.IsResyncLoadInProgress and UI.IsResyncLoadInProgress()) then
+    if not CoreBusy() and not (UI.IsResyncLoadInProgress and UI.IsResyncLoadInProgress()) then
         local ok, message = pcall(RefreshOutstanding);
         if not ok then print("[AutoTheme] Waiting for slot confirmation: " .. tostring(message)); end
     end
@@ -249,7 +262,7 @@ local function Update(delta)
     -- Repairs and other mods do not always emit a work-moved/building event.
     -- Poll only the visible idle panel; rerun the planner only when facts change.
     local polled;
-    if shown and not run and not availabilityDirty and clock - availabilityPollClock >= 2 and not UI.IsGameCoreBusy() then
+    if shown and not run and not availabilityDirty and clock - availabilityPollClock >= 2 and not CoreBusy() then
         availabilityPollClock = clock;
         local ok, current = pcall(AT.Collect);
         if ok then
@@ -261,7 +274,7 @@ local function Update(delta)
             end
         end
     end
-    if shown and not run and availabilityDirty and clock - availabilityClock >= 0.5 and not UI.IsGameCoreBusy() then
+    if shown and not run and availabilityDirty and clock - availabilityClock >= 0.5 and not CoreBusy() then
         availabilityDirty = false; availabilityClock = clock;
         availabilityTurn = Game.GetCurrentGameTurn();
         local ok, snapshot, plan = pcall(function()
@@ -336,7 +349,9 @@ Events.LocalPlayerChanged.Add(OnPlayerChanged);
 Events.LocalPlayerTurnEnd.Add(OnTurnEnd);
 -- A player departure can lead to host migration/resync. Stop the local chain;
 -- retain any submitted operation guard until the core confirms its outcome.
-if Events.MultiplayerPrePlayerDisconnected then Events.MultiplayerPrePlayerDisconnected.Add(OnPlayerChanged); end
+local sessionEvents = {Events.MultiplayerPrePlayerDisconnected,
+    Events.MultiplayerHostMigrated, Events.MultiplayerMatchHostMigrated};
+for _, event in pairs(sessionEvents) do event.Add(OnPlayerChanged); end
 ContextPtr:SetShutdown(function()
     -- Reparented controls otherwise survive a context hot reload under the
     -- native header and can overlap the replacement toolbar's labels.
@@ -346,8 +361,8 @@ ContextPtr:SetShutdown(function()
     Events.LoadScreenClose.Remove(OnLoadComplete);
     Events.LocalPlayerChanged.Remove(OnPlayerChanged);
     Events.LocalPlayerTurnEnd.Remove(OnTurnEnd);
-    if Events.MultiplayerPrePlayerDisconnected then Events.MultiplayerPrePlayerDisconnected.Remove(OnPlayerChanged); end
+    for _, event in pairs(sessionEvents) do event.Remove(OnPlayerChanged); end
     for _, event in pairs(availabilityEvents) do event.Remove(MarkAvailabilityDirty); end
 end);
 StartUpdates();
-print("[AutoTheme] UI loaded (0.3.0-mp.1 native toolbar)");
+print("[AutoTheme] UI loaded (0.3.0-mp.2 native toolbar)");

@@ -1,4 +1,4 @@
-# AutoTheme 0.3.0-mp.1 — 联机测试 / Multiplayer testing
+# AutoTheme 0.3.0-mp.2 — 联机测试 / Multiplayer testing
 
 本包启用网络联机；热座未启用。Steam 公开版仍为 0.2.5。本包已通过离线测试，尚未完成双客户端实机同步验证。
 
@@ -33,6 +33,8 @@ Keep before/after saves and note work counts, theme counts and key slots. Compar
 
 规划只在点击按钮的客户端运行，实际交换使用原版 `UI.RequestPlayerOperation(..., MOVE_GREAT_WORK, ...)`。没有自定义网络消息、Gameplay 脚本或 DLL，也不要求所有客户端重复执行同一规划。
 
-每轮绑定玩家和回合，一次只提交一笔并读取实际槽位确认。30 秒未确认则停止规划，保留该笔指令的记录；确认后或下一回合允许重新规划，不自动重发。已经提交给游戏核心的交换无法由停止按钮撤销。
+每轮绑定玩家和回合，一次只提交一笔并读取实际槽位确认。30 秒未确认则停止规划，保留该笔指令的记录，跨回合也不自动清除；实际交换确认后允许重新规划，不自动重发。若一直未确认，重新载入存档后再操作。已经提交给游戏核心的交换无法由停止按钮撤销。计时器到期、暂停、玩家变化及房主迁移会停止旧计划；消息处理期间等待，处理完成后再读取槽位。
 
-The planner runs only in the initiating UI. Every actual swap uses the same native operation as manually dragging a Great Work. No custom network messages, gameplay scripts or DLLs are added. Runs bind to one player and turn and submit one operation at a time. After 30 seconds without confirmation, the plan stops while retaining the outstanding-operation guard. Confirmation or the next authoritative turn permits a fresh plan; operations are never automatically retried. Stop cannot revoke a request already submitted to the game core.
+The planner runs only in the initiating UI. Every actual swap uses the same native operation as manually dragging a Great Work. No custom network messages, gameplay scripts or DLLs are added. Runs bind to one player and turn and submit one operation at a time. After 30 seconds without confirmation, the plan stops while retaining the outstanding-operation guard, including across turns. Observed slot results permit a fresh plan; operations are never automatically retried. If confirmation never arrives, reload the save before trying again. Stop cannot revoke a request already submitted to the game core. Timer expiration, pauses, player changes and host migration stop the old plan. Message processing suspends slot reads and submissions until it finishes.
+
+参考实现、修复依据及验证边界见 [代码审查 / Source review](MULTIPLAYER_CODE_REVIEW.zh-CN.md)。

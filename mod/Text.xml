@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <GameData>
   <LocalizedText>
-    <Row Tag="LOC_AT_WAIT_SYNC" Language="zh_Hans_CN"><Text>交换尚未确认，已暂停整理；确认后或下一回合可重试</Text></Row>
-    <Row Tag="LOC_AT_WAIT_SYNC" Language="en_US"><Text>Swap unconfirmed; paused. Retry after confirmation or next turn</Text></Row>
+    <Row Tag="LOC_AT_WAIT_SYNC" Language="zh_Hans_CN"><Text>等待交换确认；若一直无响应，请重新载入存档</Text></Row>
+    <Row Tag="LOC_AT_WAIT_SYNC" Language="en_US"><Text>Waiting for swap confirmation; reload your save if it stays unresponsive</Text></Row>
     <Row Tag="LOC_AT_SESSION_CHANGED" Language="zh_Hans_CN"><Text>玩家或游戏会话已变化，停止整理；请重新点击</Text></Row>
     <Row Tag="LOC_AT_SESSION_CHANGED" Language="en_US"><Text>Player or game session changed; stopped. Click again to replan</Text></Row>
     <Row Tag="LOC_AT_NO_COMBINATION_SHORT" Language="zh_Hans_CN"><Text>暂无可改善的组合</Text></Row>

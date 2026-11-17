@@ -1,15 +1,15 @@
 {
-  "version": "0.3.0-mp.1",
-  "manifestVersion": 9,
+  "version": "0.3.0-mp.2",
+  "manifestVersion": 10,
   "modId": "d908d082-9c4e-4bbb-ab01-902f1e9c493e4a8a",
   "workshopItem": "3840337211",
   "files": {
-    "AutoTheme.lua": "85b37af9efaece843928e683811a822a383711be2d91f5357e789f33f17ea792",
-    "AutoTheme.modinfo": "ad8936599e821dec22380fa9b39bc55252d59cc389fc29971cec1b4cb751cc4c",
+    "AutoTheme.lua": "914401f9fa37075e1a41948b6f0f56717f8067910ab93830f4465809bedff6ff",
+    "AutoTheme.modinfo": "78df4bdbddcddb4ee7742be2917b7118126b0dbce83ae63892ca1b51c39a5541",
     "AutoTheme.xml": "3ac2102ea92194776df7369ac7f467d5126dad9ce0d0313b48512a147dcc0e3d",
     "AutoTheme_Planner.lua": "b1ad4e2c0915d9373104745997769e35967572f8420b6afab3bdc63715f00198",
     "AutoTheme_Scoring.lua": "3156f28f313898ff91c8d15e4ac27ec6edf191a9b2c20cc445b917a3dbfc5538",
     "LICENSE.txt": "76f22776526f69ce80b0dff114982a94d2535fecb3fffb1922b02c708e529215",
-    "Text.xml": "6e9ff3d9f3e4eaa85e5eb9016e2ee460cf67a49f724c2ee50ba9be03b425a8c7"
+    "Text.xml": "09642dcd1eafa9cea234885d2a2004a60f070131e3517b32b33f4d448b099cff"
   }
 }

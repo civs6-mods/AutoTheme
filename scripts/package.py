@@ -8,6 +8,6 @@ with ZipFile(out,'w',ZIP_DEFLATED) as z:
  for p in sorted((r/'mod').iterdir()):
   if p.is_file():z.write(p,'AutoTheme/'+p.name)
  for n in ['README.md','README.zh-CN.md','LICENSE']:z.write(r/n,n)
- z.write(r/'docs/MULTIPLAYER.md','MULTIPLAYER.md')
+ for p in sorted((r/'docs').glob('*.md')):z.write(p,'docs/'+p.name)
 with ZipFile(out) as z:assert z.testzip() is None
 print(out)

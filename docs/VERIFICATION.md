@@ -1,4 +1,14 @@
-# 0.3.0-mp.1 multiplayer test build / 联机测试包
+# 0.3.0-mp.2 source comparison and scheduling fixes / 源码对照与修复
+
+2026-11-17: Manifest 10. Compared native Great Work moves with Great Works Viewer, CQUI/Better Trade Screen automation and Multiplayer Helper's gameplay/UI separation, disconnect and host tooling. Pinned references and findings are in [the code review](MULTIPLAYER_CODE_REVIEW.zh-CN.md).
+
+The scheduler now checks turn activation completion, local timer expiration and game pause; waits during message processing; rechecks eligibility immediately before submission; and stops on host-migration events. A turn-number change no longer clears an unconfirmed request. Only observed exchanged slots or a new loaded session release that guard. No automatic retry or old-plan replay is added.
+
+All offline suites pass: planner (25 assertions), availability, interactions, multiplayer scheduler (953 assertions, including repeated mock ownership checks, not 953 distinct scenarios), and bilingual metadata / 30 in-game text keys. New cases cover timer expiry while the core still reports an active turn, timer/message changes during snapshot collection, incomplete activation, pause/unpause, message processing, late confirmation across turns, recovery after loading and both host-migration events. Existing single-player scenarios also pass. The cross-turn guard test failed against mp.1 before the implementation change.
+
+Conclusion: the native-operation integration is consistent with the reviewed sources; identified scheduling issues are fixed and the offline regressions pass. Actual peer replication, packet loss, reconnect/save-load, Windows–macOS interoperability and arbitrary mod combinations remain outside code-only verification. No live multiplayer result is claimed. Steam's public 0.2.5 package is unchanged.
+
+# 0.3.0-mp.1 multiplayer test build / 历史联机测试包
 
 2026-11-17: Manifest 9 enables network multiplayer (`SupportsMultiplayer=1`), retaining hotseat disabled. `release-manifest.json` records this test package, not the public Steam release. The original single-player planner and scoring rules remain; execution now pins player and turn, observes submitted End Turn, stops on player departure/change and resync, and retains outstanding requests after timeout, error or external collection changes. No request is automatically retried. A matching pair of actual exchanged slots or a new authoritative turn releases the guard. Reconnect/load discards all former UI plans.
 

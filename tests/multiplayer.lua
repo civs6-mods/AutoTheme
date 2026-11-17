@@ -22,21 +22,32 @@ local function world()
     return w;
 end
 local function client(w,id)
-    local c={id=id,active=true,sent=false,busy=false,resync=false,hidden=false};
+    local c={id=id,active=true,sent=false,busy=false,resync=false,hidden=false,
+        timerExpired=false,processing=false,turnReady=true,paused=false};
     local e=setmetatable({}, {__index=_G}); c.env=e;
     e.print=function() end; e.include=function() end;
     e.Events={};
     for _,name in ipairs({'GreatWorkMoved','GreatWorkCreated','BuildingAddedToMap','BuildingRemovedFromMap',
         'CityAddedToMap','CityRemovedFromMap','BuildingChanged','DistrictPillaged','DistrictDamageChanged',
         'CityFocusChanged','LocalPlayerTurnBegin','LocalPlayerTurnEnd','LocalPlayerChanged','LoadScreenClose',
-        'MultiplayerPrePlayerDisconnected'}) do
+        'MultiplayerPrePlayerDisconnected','MultiplayerHostMigrated','MultiplayerMatchHostMigrated'}) do
         e.Events[name]=event();
     end
     e.Game={GetLocalPlayer=function() return c.id; end, GetCurrentGameTurn=function() return w.turn; end};
-    e.Players={[0]={IsTurnActive=function() return c.active; end},[1]={IsTurnActive=function() return c.active; end}};
+    e.GameConfiguration={IsPaused=function() return c.paused; end};
+    e.Players={};
+    for player=0,1 do
+        e.Players[player]={IsTurnActive=function() return c.active; end,
+            IsTurnActiveComplete=function() return c.turnReady; end};
+    end
     e.PlayerOperations={MOVE_GREAT_WORK=1, PARAM_PLAYER_ONE='player',PARAM_CITY_SRC='citySource',PARAM_CITY_DEST='cityDest',
         PARAM_GREAT_WORK_INDEX='work',PARAM_BUILDING_SRC='buildingSource',PARAM_BUILDING_DEST='buildingDest',PARAM_SLOT='slot'};
     e.UI={IsGameCoreBusy=function() return c.busy; end, HasSentTurnComplete=function() return c.sent; end,
+        IsProcessingMessages=function() return c.processing; end,
+        IsTurnTimerElapsed=function(player)
+            check(player==c.id,'turn timer must belong to the local player');
+            return c.timerExpired;
+        end,
         IsResyncLoadInProgress=function() return c.resync; end,
         RequestPlayerOperation=function(player,operation,params)
             check(player==c.id and player==params.player,'operation owner must match the local player');
@@ -47,6 +58,7 @@ local function client(w,id)
     e.AutoTheme={Collect=function(player)
         player=player or c.id;
         check(player==c.id,'planner must only collect its own player');
+        if c.onCollect then c.onCollect(); end
         local container={key='city',allowed=true,unlocked=true,count=3,slots={}};
         local s={containers={container},slots={},works={},themed=0};
         for key,work in ipairs(w.contents[player] or {}) do
@@ -109,7 +121,55 @@ a.sent=false; w.turn=w.turn+1; a:tick(); check(#w.queue==1,'next turn does not a
 w=world(); a=client(w,0); a:start(); w:deliver(1); w.turn=w.turn+1; a:tick();
 check(#w.queue==1,'old plan must not cross turn boundary');
 w=world(); a=client(w,0); a:start(); a:tick(31); w.turn=w.turn+1; a:start();
-check(#w.queue==2,'unconfirmed previous-turn request allows a fresh next-turn plan');
+check(#w.queue==1 and a.disabled,'turn rollover is not confirmation of an outstanding request');
+w:deliver(1); a:tick(); check(#w.queue==1 and not a.disabled,'late confirmation across turns unlocks without replay');
+a:start(); check(#w.queue==2 and w.queue[2].params.work==2,'next-turn plan uses the late confirmed contents');
+
+-- Native turn state can remain active after the local timer expires, or before
+-- turn activation finishes. Neither state authorizes an automated request.
+w=world(); a=client(w,0); a.timerExpired=true; a:start();
+check(#w.queue==0 and a.disabled,'expired timer blocks a new run while IsTurnActive remains true');
+w=world(); a=client(w,0); a:start(); a.timerExpired=true; w:deliver(1); a:tick();
+check(#w.queue==1 and a.status=='LOC_AT_TURN_ENDED','timer expiry stops the chain after an acknowledged swap');
+a:tick(); check(a.disabled,'expired timer disables starting another run');
+a.timerExpired=false; a:tick(); check(#w.queue==1,'timer reset cannot resume a stopped plan');
+w=world(); a=client(w,0); a.turnReady=false; a:start();
+check(#w.queue==0 and a.disabled,'incomplete turn activation blocks starting');
+a.turnReady=true; a:start(); check(#w.queue==1,'completed activation permits a fresh run');
+w=world(); a=client(w,0); a.paused=true; a:start();
+check(#w.queue==0 and a.disabled,'multiplayer pause blocks starting');
+a.paused=false; a:start(); a.paused=true; w:deliver(1); a:tick();
+check(#w.queue==1,'multiplayer pause stops an existing chain');
+a.paused=false; a:tick(); check(#w.queue==1,'unpausing must not resume the old chain');
+
+-- Message processing is transient: wait without reading a partial exchange or
+-- issuing another request, then resume only after processing finishes.
+w=world(); a=client(w,0); a.processing=true; a:start();
+check(#w.queue==0,'message processing blocks planning and submission');
+a.processing=false; a:tick(); a:tick(); check(#w.queue==1,'run proceeds after message processing');
+a.processing=true; w:deliver(1); a:tick(); check(#w.queue==1,'no follow-up while messages are processing');
+a.processing=false; a:tick(); check(#w.queue==2,'confirmed exchange advances once processing ends');
+
+-- Planning/snapshot collection can be expensive. Recheck input immediately
+-- before submitting, rather than trusting the state from the start of the tick.
+w=world(); a=client(w,0); a:start(); w:deliver(1);
+a.onCollect=function() a.timerExpired=true; end; a:tick();
+check(#w.queue==1,'timer expiry during snapshot collection blocks submission');
+w=world(); a=client(w,0); a:start(); w:deliver(1);
+a.onCollect=function() w.turn=w.turn+1; end; a:tick();
+check(#w.queue==1,'turn rollover during snapshot collection blocks the old plan');
+w=world(); a=client(w,0); a:start(); w:deliver(1);
+a.onCollect=function() a.processing=true; end; a:tick();
+check(#w.queue==1,'message processing starting during collection blocks submission');
+a.onCollect=nil; a.processing=false; a:tick();
+check(#w.queue==2,'fresh revalidation can proceed after transient processing');
+
+-- A rejected/never-confirmed request remains guarded; a new loaded session
+-- permits replanning without replaying the old plan.
+w=world(); a=client(w,0); a:start(); a:tick(31); w.turn=w.turn+1; a:start();
+check(#w.queue==1,'unconfirmed request remains guarded until confirmation or load');
+a.env.Events.LoadScreenClose.fire(); a:tick(); check(#w.queue==1,'loading does not replay old requests');
+a:start(); check(#w.queue==2,'a fresh loaded session permits an explicit new plan');
 
 -- Cancellation, observer transitions and overlapping city/slot IDs.
 w=world(); a=client(w,0); a:start(); a.click(); w:deliver(1); a:tick();
@@ -132,6 +192,11 @@ a:start(); check(#w.queue==2 and w.queue[2].params.work==2,'reconnected plan use
 w=world(); a=client(w,0); a:start(); a.env.Events.MultiplayerPrePlayerDisconnected.fire(1);
 a.click(); a:tick(); check(#w.queue==1,'disconnect stops the chain without discarding its pending guard');
 w:deliver(1); a:tick(); check(#w.queue==1,'late response after disconnect must not restart the chain');
+for _,name in ipairs({'MultiplayerHostMigrated','MultiplayerMatchHostMigrated'}) do
+    w=world(); a=client(w,0); a:start(); a.env.Events[name].fire(1); a:tick();
+    a.click(); a:tick(); check(#w.queue==1,'host migration must retain the outstanding guard');
+    w:deliver(1); a:tick(); check(#w.queue==1,'host migration must not replay the old plan');
+end
 w=world(); a=client(w,0); a:start(); a.busy=true; a:tick(45); w:deliver(1); a.busy=false; a:tick();
 check(#w.queue==2,'confirmed result survives a long game-core busy interval');
 w=world(); a=client(w,0); a.throwAfterSubmit=true; a:start(); a.click(); a:tick();

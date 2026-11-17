@@ -10,9 +10,11 @@ Arrange the Great Works you already own with one click in Civilization VI. AutoT
 
 ## Current release
 
-**0.3.0-mp.1 · Multiplayer test build.** The public Steam release is still 0.2.5.
+**0.3.0-mp.2 · Multiplayer test build.** The public Steam release is still 0.2.5.
 
 This branch enables network multiplayer using native Great Work move requests. Each player arranges only their own collection. Offline scheduler checks pass; a two-client game test is still required. See [multiplayer installation and test steps](docs/MULTIPLAYER.md).
+
+The [source comparison and code review](docs/MULTIPLAYER_CODE_REVIEW.zh-CN.md) covers Great Works Viewer, CQUI/Better Trade Screen, Multiplayer Helper and the native UI. The reviewed build adds timer, message-processing, pause and host-migration guards and preserves unconfirmed requests across turn boundaries.
 
 - Scans actual works and slots across the Great Works panel, including art, artifacts, relics, writing, music, corporation products and standard mod-added types.
 - Uses native move requests one at a time and waits for the actual slot contents before continuing.
@@ -48,7 +50,7 @@ python scripts/test.py
 python scripts/package.py
 ```
 
-`mod/` contains installable Lua/XML; `tests/` contains offline regressions; `workshop/` contains the public release's cover, bilingual descriptions and gameplay images. The ZIP is written to `dist/AutoTheme-0.3.0-mp.1.zip`. See [detailed rules](docs/BEHAVIOR.zh-CN.md) and [verification records](docs/VERIFICATION.md) for implementation and testing details.
+`mod/` contains installable Lua/XML; `tests/` contains offline regressions; `workshop/` contains the public release's cover, bilingual descriptions and gameplay images. The ZIP is written to `dist/AutoTheme-0.3.0-mp.2.zip`. See [detailed rules](docs/BEHAVIOR.zh-CN.md) and [verification records](docs/VERIFICATION.md) for implementation and testing details.
 
 ## Contributing & license
 
